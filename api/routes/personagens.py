@@ -1,7 +1,10 @@
 from fastapi import APIRouter
-from database.db import personagem, habilidade_colab, db
+from database.db import personagem, habilidade_colab, db, partidas, jogadores
 
 router = APIRouter(prefix="/personagens", tags=["personagens"])
+
+
+
 
 @router.get("")
 def listar_personagens():
@@ -174,4 +177,4 @@ def get_habilidades_colaboracao(personagem_id: str):
     
     except ValueError:
         return {"erro": f"ID '{personagem_id}' inválido. Deve ser um número."}
-    
+

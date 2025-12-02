@@ -1,5 +1,7 @@
 from fastapi import APIRouter
 from database.db import jogadores
+from database.db import partidas
+from database.db import db
 
 
 router = APIRouter(prefix="/jogadores", tags=["jogadores"])
@@ -40,69 +42,3 @@ def get_jogador_por_nome(jogador_nome: str):
         
     except Exception as e:
         return {"erro": f"Erro ao buscar jogador: {str(e)}"}
-
-@router.get("/vitorias/{jogador_nome}")
-def get_vitorias_jogador_personagem(jogador_nome: str):
-
-    try:
-        # usar aggregation para simular a view
-        pipeline = [
-            # Filtra pelo nome do jogador (case insensitive)
-            {"$match": {
-                "nome_jogador": {"$regex": f"^{jogador_nome}$", "$options": "i"}
-            }},
-            
-            # Se não encontrar, tenta busca parcial
-            {"$match": {
-                "nome_jogador": {"$regex": jogador_nome, "$options": "i"}
-            }},
-            
-            # Formata o resultado
-            {"$project": {
-                "_id": 0,  # Remove _id
-                "nome_jogador": 1,
-                "nome_personagem": 1,
-                "total_vitorias": 1,
-                "total_partidas": 1,
-                "taxa_vitoria": {
-                    "$cond": {
-                        "if": {"$gt": ["$total_partidas", 0]},
-                        "then": {
-                            "$multiply": [
-                                {"$divide": ["$total_vitorias", "$total_partidas"]},
-                                100
-                            ]
-                        },
-                        "else": 0
-                    }
-                }
-            }}
-        ]
-        
-        resultados = list(jogadores.aggregate(pipeline))
-        
-        if not resultados:
-            # Se não encontrar na coleção principal, talvez tenha coleção separada
-            from database.db import db
-            colecoes = db.list_collection_names()
-            
-            if "vitorias_jogadores_personagens" in colecoes:
-                colecao_vitorias = db["vitorias_jogadores_personagens"]
-                resultados = list(colecao_vitorias.find({
-                    "nome_jogador": {"$regex": jogador_nome, "$options": "i"}
-                }))
-            
-        
-        # Converte ObjectId para string se existir
-        for resultado in resultados:
-            if "_id" in resultado:
-                resultado["_id"] = str(resultado["_id"])
-        
-        return {
-            "jogador": jogador_nome,
-            "total_resultados": len(resultados),
-            "estatisticas": resultados
-        }
-        
-    except Exception as e:
-        return {"erro": f"Erro ao buscar vitórias: {str(e)}"}
