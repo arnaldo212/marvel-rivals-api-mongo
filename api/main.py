@@ -10,16 +10,8 @@ app.include_router(personagens.router)
 app.include_router(partidas.router)
 app.include_router(jogadores.router)
 
-
-origins = [
-    "http://localhost",
-    "http://localhost:8000",
-    "http://localhost:3000",  # Exemplo para React/Next.js
-    "http://127.0.0.1:5500", # Exemplo para Live Server do VS Code
-    "http://127.0.0.1",
-    "http://127.0.0.1:5173",
-    "https://seu-dominio-frontend.com",
-]
+#CORS
+origins = ["https://api-marvel-rivals.onrender.com", "*"]
 
 # Adicione o middleware ao aplicativo
 app.add_middleware(
@@ -38,3 +30,4 @@ def root():
         "status": "online"
 
     }
+
