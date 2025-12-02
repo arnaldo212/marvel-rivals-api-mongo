@@ -11,7 +11,7 @@ app.include_router(partidas.router)
 app.include_router(jogadores.router)
 
 #CORS
-origins = ["https://api-marvel-rivals.onrender.com", "*"]
+origins = ["https://marvel-rivals-api-mongo.onrender.com", "*"]
 
 # Adicione o middleware ao aplicativo
 app.add_middleware(
@@ -30,4 +30,5 @@ def root():
         "status": "online"
 
     }
+
 
