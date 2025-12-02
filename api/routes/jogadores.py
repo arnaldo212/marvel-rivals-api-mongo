@@ -18,10 +18,7 @@ def get_jogadores():
             if "_id" in jogador:
                 jogador["_id"] = str(jogador["_id"])
         
-        return {
-            "total": len(todos_jogadores),
-            "jogadores": todos_jogadores
-        }
+        return todos_jogadores
     except Exception as e:
         return {"erro": f"Erro ao buscar jogadores: {str(e)}"}
 
@@ -42,3 +39,4 @@ def get_jogador_por_nome(jogador_nome: str):
         
     except Exception as e:
         return {"erro": f"Erro ao buscar jogador: {str(e)}"}
+
