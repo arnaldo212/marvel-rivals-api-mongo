@@ -1,9 +1,9 @@
 from fastapi import FastAPI
 from database.db import personagem, db
 from routes import personagens, partidas, jogadores
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
-
 
 #rotas
 app.include_router(personagens.router)
@@ -30,5 +30,6 @@ def root():
         "status": "online"
 
     }
+
 
 
