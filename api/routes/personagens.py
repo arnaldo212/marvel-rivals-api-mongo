@@ -14,7 +14,7 @@ def listar_personagens():
         for p in personagens:
             p["_id"] = str(p["_id"])  # Converte número para string
         
-        return {"total": len(personagens), "personagens": personagens}
+        return personagens
     except Exception as e:
         return {"erro": f"Falha ao buscar personagens: {str(e)}", "total": 0, "personagens": []}
 
@@ -177,4 +177,5 @@ def get_habilidades_colaboracao(personagem_id: str):
     
     except ValueError:
         return {"erro": f"ID '{personagem_id}' inválido. Deve ser um número."}
+
 
