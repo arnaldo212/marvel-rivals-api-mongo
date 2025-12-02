@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from database.db import partidas, db
-
+from fastapi import HTTPException
 
 router = APIRouter(prefix="/partidas", tags=["partidas"])
 
@@ -448,4 +448,5 @@ def get_personagens_vitorias_por_jogador(jogador_nome: str):
         raise HTTPException(
             status_code=500, 
             detail=f"Erro ao executar a agregação: {str(e)}"
+
         )
